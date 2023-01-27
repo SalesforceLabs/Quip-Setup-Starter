@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>errorComponent</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed>isExposed</isExposed>
+        <name>wrapperComponent</name>
+        <targets>lightning__Tab</targets>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>autoFoldersComponent</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>connectionCheckComponent</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>liveFeedComponent</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>welcomeComponent</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>sectionWrapper</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>tooltip</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>comingSoonComponent</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>navigationComponent</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>navigationItem</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>docNotificationsComponent</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>byopComponent</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>liveFeedStandardComponent</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>accountPlanComponent</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>authenticateComponent</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>oppNotesComponent</name>
+    </lightningComponents>
+    <lightningComponents>
+        <isExposed xsi:nil="true"/>
+        <name>stepWrapper</name>
+    </lightningComponents>
+    <namespacePrefix>quip_labs</namespacePrefix>
+    <types>
+        <members>AccountPlanHandler</members>
+        <members>AccountPlanHandlerTest</members>
+        <members>AutoFolderHandler</members>
+        <members>AutoFolderHandlerTest</members>
+        <members>ByopHandler</members>
+        <members>ByopHandlerTest</members>
+        <members>FlowCreator</members>
+        <members>FlowCreatorTest</members>
+        <members>LiveDataFeedHandler</members>
+        <members>LiveDataFeedHandlerTest</members>
+        <members>MetadataService</members>
+        <members>MetadataServiceTest</members>
+        <members>OppNotesHandler</members>
+        <members>OppNotesHandlerTest</members>
+        <members>QuipAPIHttpCalloutMock</members>
+        <members>QuipHandlerException</members>
+        <members>QuipSetupHandler</members>
+        <members>QuipSetupHandlerTest</members>
+        <members>ToolingAPIHttpCalloutMock</members>
+        <members>ToolingAPIMetadataHttpCalloutMock</members>
+        <members>ToolingAPIRecordHttpCalloutMock</members>
+        <members>ToolingService</members>
+        <members>ToolingServiceTest</members>
+        <members>Utils</members>
+        <members>UtilsTest</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>SessionPage</members>
+        <name>ApexPage</name>
+    </types>
+    <types>
+        <members>Quip_Icon1</members>
+        <name>ContentAsset</name>
+    </types>
+    <types>
+        <members>Quip_Setup_Flow</members>
+        <name>CustomApplication</name>
+    </types>
+    <types>
+        <members>Account_Plan_Run__c.Copy_Page__c</members>
+        <members>Account_Plan_Run__c.Create_Option__c</members>
+        <members>Account_Plan_Run__c.Field__c</members>
+        <members>Account_Plan_Run__c.Object__c</members>
+        <members>Account_Plan_Run__c.Page_ID__c</members>
+        <members>Account_Plan_Run__c.Run_Time__c</members>
+        <members>Account_Plan_Run__c.Starter_Template__c</members>
+        <members>Account_Plan_Run__c.Tab_Name__c</members>
+        <members>Account_Plan_Run__c.Template__c</members>
+        <members>Auto_Folders_Run__c.Field__c</members>
+        <members>Auto_Folders_Run__c.Folder_Related_Object__c</members>
+        <members>Auto_Folders_Run__c.Folder_Relationship__c</members>
+        <members>Auto_Folders_Run__c.Folder_URL__c</members>
+        <members>Auto_Folders_Run__c.Folder__c</members>
+        <members>Auto_Folders_Run__c.Object__c</members>
+        <members>Auto_Folders_Run__c.Run_Time__c</members>
+        <members>Byop_Run__c.Copy_Page__c</members>
+        <members>Byop_Run__c.Create_Option__c</members>
+        <members>Byop_Run__c.Field__c</members>
+        <members>Byop_Run__c.Object__c</members>
+        <members>Byop_Run__c.Page_ID__c</members>
+        <members>Byop_Run__c.Run_Time__c</members>
+        <members>Byop_Run__c.Tab_Name__c</members>
+        <members>Byop_Run__c.Template__c</members>
+        <members>Connection_Check__c.Viewed__c</members>
+        <members>Live_Data_Feed_Run__c.Criteria_Field__c</members>
+        <members>Live_Data_Feed_Run__c.Criteria_Type__c</members>
+        <members>Live_Data_Feed_Run__c.Destination_URL__c</members>
+        <members>Live_Data_Feed_Run__c.Object__c</members>
+        <members>Live_Data_Feed_Run__c.Run_Time__c</members>
+        <members>Live_Data_Feed_Run__c.Type__c</members>
+        <members>Opportunity_Notes_Run__c.Copy_Page__c</members>
+        <members>Opportunity_Notes_Run__c.Create_Option__c</members>
+        <members>Opportunity_Notes_Run__c.Field__c</members>
+        <members>Opportunity_Notes_Run__c.Object__c</members>
+        <members>Opportunity_Notes_Run__c.Page_ID__c</members>
+        <members>Opportunity_Notes_Run__c.Run_Time__c</members>
+        <members>Opportunity_Notes_Run__c.Starter_Template__c</members>
+        <members>Opportunity_Notes_Run__c.Tab_Name__c</members>
+        <members>Opportunity_Notes_Run__c.Template__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>Account_Plan_Run__c</members>
+        <members>Auto_Folders_Run__c</members>
+        <members>Byop_Run__c</members>
+        <members>Connection_Check__c</members>
+        <members>Live_Data_Feed_Run__c</members>
+        <members>Opportunity_Notes_Run__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>Setup</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>Quip_Setup_Flow_UtilityBar</members>
+        <name>FlexiPage</name>
+    </types>
+    <types>
+        <members>accountPlanComponent</members>
+        <members>authenticateComponent</members>
+        <members>autoFoldersComponent</members>
+        <members>byopComponent</members>
+        <members>comingSoonComponent</members>
+        <members>connectionCheckComponent</members>
+        <members>docNotificationsComponent</members>
+        <members>errorComponent</members>
+        <members>liveFeedComponent</members>
+        <members>liveFeedStandardComponent</members>
+        <members>navigationComponent</members>
+        <members>navigationItem</members>
+        <members>oppNotesComponent</members>
+        <members>sectionWrapper</members>
+        <members>stepWrapper</members>
+        <members>tooltip</members>
+        <members>welcomeComponent</members>
+        <members>wrapperComponent</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>Quip</members>
+        <name>RemoteSiteSetting</name>
+    </types>
+    <types>
+        <members>accountPlan</members>
+        <members>astro</members>
+        <members>astro2</members>
+        <members>byop</members>
+        <members>connectionChecklist</members>
+        <members>folders</members>
+        <members>liveFeed</members>
+        <members>notificationsDocs</members>
+        <members>opportunityNotes</members>
+        <members>tabSample</members>
+        <members>textArea</members>
+        <name>StaticResource</name>
+    </types>
+    <version>51.0</version>
+</Package>

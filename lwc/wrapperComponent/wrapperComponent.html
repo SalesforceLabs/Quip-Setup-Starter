@@ -1,0 +1,34 @@
+<template>
+    <div class="wrapper">
+        <template if:false={loadingChecks}>
+            <template if:false={isError}>
+                <template if:true={quipAuthStatus}>
+                    <c-navigation-component headings={headings} sections={sections} selected={selectedSection} onselectsection={handleSelectSection}></c-navigation-component>
+                    <div style="flex: 1">
+                        <c-welcome-component if:false={selectedSection}></c-welcome-component>
+                        <c-connection-check-component onfinish={handleFinish} if:true={isCheckConnectionsSection}></c-connection-check-component>
+                        <c-account-plan-component onfinish={handleFinish} if:true={isAccountPlanSection}></c-account-plan-component>
+                        <c-opp-notes-component onfinish={handleFinish} if:true={isOppNotesSection}></c-opp-notes-component>
+                        <c-byop-component onfinish={handleFinish} if:true={isByopSection}></c-byop-component>
+                        <c-auto-folders-component onfinish={handleFinish} if:true={isAutoFoldersSection}></c-auto-folders-component>
+                        <c-doc-notifications-component onfinish={handleFinish} if:true={isAutoNotificationsSection}></c-doc-notifications-component>
+                        <c-live-feed-component onfinish={handleFinish} if:true={isLiveFeedSection}></c-live-feed-component>
+                    </div>
+                </template>
+                <template if:false={quipAuthStatus}>
+                    <c-authenticate-component auth-provider={quipAuthProviderOkay}></c-authenticate-component>
+                </template>
+            </template>
+            <div style="flex: 1" if:true={isError}>
+                <c-error-component
+                    metadata={hasMetadataApi}
+                    perm-set-exists={hasPermissionSetExists}
+                    perm-set-assigned={hasPermissionSetAssigned}
+                    apex-triggers={hasNoApexTriggers}></c-error-component>
+            </div>
+        </template>
+        <div class="checking-auth" if:true={loadingChecks}>
+            <lightning-spinner alternative-text="Loading" variant="brand" size="large"></lightning-spinner>
+        </div>
+    </div>
+</template>

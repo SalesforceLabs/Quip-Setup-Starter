@@ -1,0 +1,8 @@
+<template>
+    <li key={section.key} if:true={section.selected} class="slds-nav-vertical__item slds-is-active">
+        <span class="slds-nav-vertical__action" aria-current="true">{section.label}</span>
+    </li>
+    <li class="slds-nav-vertical__item" onclick={handleClick} if:false={section.selected}>
+        <span class="slds-nav-vertical__action">{section.label}</span>
+    </li>
+</template>

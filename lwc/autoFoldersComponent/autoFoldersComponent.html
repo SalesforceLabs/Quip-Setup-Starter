@@ -1,0 +1,418 @@
+<template>
+    <c-section-wrapper>
+        <div class="main flex-spinner" if:false={lastRunLoaded}>
+            <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+            </lightning-spinner>
+        </div>
+        <div class="main" if:true={lastRunLoaded}>
+            <div>
+                <c-step-wrapper step="1" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Move Documents to Folders</h3>
+                        <p>Keep embedded documents organized and help your teams find their work in Quip folders.</p>
+                        <img src={homeImage} alt="Messaging" style="max-height: 40vh;" />
+                        <p class="slds-text-align_left">
+                            To start moving embedded Quip documents to folders with automation, we need to:<br />
+                            1. Choose which Quip documents to move<br />
+                            2. Create a folder structure<br />
+                            3. Set move conditions
+                        </p>
+                        <div
+                            class="large-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large">
+                            Do you want to learn more about this setup before proceeding? <a
+                                href="https://quip.com/DjymAUmx7LCB" target="_blank">Tell Me More</a>.
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="2" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Select Document Object
+                        </h3>
+                        <p>To move embedded documents to a folder, choose the object that they're linked to.</p>
+
+                        <fieldset class="slds-form-element slds-m-top_large">
+                            <div class="slds-form-element__control">
+                                <div class="slds-visual-picker slds-visual-picker_medium">
+                                    <input type="radio" id="visual-picker-6" value="account" name="object-options"
+                                        onchange={handleObjectTypeChange} checked={isObjectTypeAccount} />
+                                    <label for="visual-picker-6">
+                                        <span
+                                            class="slds-visual-picker__figure slds-visual-picker__icon slds-align_absolute-center">
+                                            <span class="slds-is-selected">
+                                                <lightning-icon icon-name="action:check" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                            <span class="slds-is-not-selected">
+                                                <lightning-icon icon-name="standard:account" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                        </span>
+                                        <span class="slds-visual-picker__body">
+                                            <span class="slds-text-heading_small pretty-link">Account</span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="slds-visual-picker slds-visual-picker_medium">
+                                    <input type="radio" id="visual-picker-7" value="opportunity" name="object-options"
+                                        onchange={handleObjectTypeChange} checked={isObjectTypeOpportunity} />
+                                    <label for="visual-picker-7">
+                                        <span
+                                            class="slds-visual-picker__figure slds-visual-picker__icon slds-align_absolute-center">
+                                            <span class="slds-is-selected">
+                                                <lightning-icon icon-name="action:check" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                            <span class="slds-is-not-selected">
+                                                <lightning-icon icon-name="standard:opportunity" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                        </span>
+                                        <span class="slds-visual-picker__body">
+                                            <span class="slds-text-heading_small pretty-link">Opportunity</span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="slds-visual-picker slds-visual-picker_medium">
+                                    <input type="radio" id="visual-picker-8" value="custom" name="object-options"
+                                        onchange={handleObjectTypeChange} checked={isObjectTypeCustom} />
+                                    <label for="visual-picker-8">
+                                        <span
+                                            class="slds-visual-picker__figure slds-visual-picker__icon slds-align_absolute-center">
+                                            <span class="slds-is-selected">
+                                                <lightning-icon icon-name="action:check" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                            <span class="slds-is-not-selected">
+                                                <lightning-icon icon-name="custom:custom8" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                        </span>
+                                        <span class="slds-visual-picker__body">
+                                            <span class="slds-text-heading_small pretty-link">Other
+                                                Object</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="slds-m-top_large">
+                            <div class="standard-width grey-background slds-p-top_x-small slds-p-bottom_medium slds-p-horizontal_medium slds-text-align_left"
+                                if:true={isObjectTypeCustom}>
+                                <lightning-combobox name="customObject" label="Object" value={objectName}
+                                    options={orgObjects} onchange={handleObjectNameChange}
+                                    placeholder="Select an Object…" required></lightning-combobox>
+                            </div>
+
+                            <div class="standard-width grey-background slds-p-top_x-small slds-p-bottom_medium slds-p-horizontal_medium slds-text-align_left"
+                                if:true={objectName}>
+                                <template if:false={loadingObjectInfo}>
+                                    <lightning-combobox name="customField" label="Quip Document URL Field"
+                                        value={fieldName} options={objectFields} onchange={handleFieldChange}
+                                        placeholder="Select a field…"
+                                        field-level-help="Custom Quip URL field. Use the Account Plan or Opportunity Notes custom fields, or use your own custom field that contains Quip in the field label or API name."
+                                        required if:true={foundObjectFields}></lightning-combobox>
+                                    <lightning-combobox name="customField" label="Quip Document URL Field"
+                                        value={fieldName} options={objectFields} onchange={handleFieldChange}
+                                        placeholder="No fields found"
+                                        field-level-help="Custom Quip URL field. Use the Account Plan or Opportunity Notes custom fields, or use your own custom field that contains Quip in the field label or API name."
+                                        required if:false={foundObjectFields}></lightning-combobox>
+                                </template>
+                                <lightning-combobox name="customField" label="Quip Document URL Field" value={fieldName}
+                                    options={objectFields} onchange={handleFieldChange} placeholder="Loading fields…"
+                                    field-level-help="Custom Quip URL field. Use the Account Plan or Opportunity Notes custom fields, or use your own custom field that contains Quip in the field label or API name."
+                                    required if:true={loadingObjectInfo}></lightning-combobox>
+                            </div>
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="3" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Create a Folder Structure
+                        </h3>
+                        <p>Select how you want to organize your Quip documents and folders.</p>
+
+                        <fieldset class="slds-form-element slds-m-top_large">
+                            <div class="slds-form-element__control">
+                                <div class="slds-visual-picker slds-visual-picker_vertical">
+                                    <input type="radio" id="visual-picker-1" value="one" name="folder-options"
+                                        onchange={handleFolderTypeChange} checked={isFolderTypeOne} />
+                                    <label for="visual-picker-1">
+                                        <span class="slds-visual-picker__figure slds-visual-picker__text">
+                                            <span>
+                                                <span
+                                                    class="slds-text-heading_medium slds-m-bottom_x-small pretty-link">One
+                                                    Folder</span>
+                                                <span class="slds-text-title">Add all documents to a single Quip
+                                                    folder.</span>
+                                            </span>
+                                        </span>
+                                        <lightning-icon icon-name="utility:check" size="x-small" variant="inverse"
+                                            class="slds-visual-picker__text-check"></lightning-icon>
+                                    </label>
+                                </div>
+                                <div class="slds-visual-picker slds-visual-picker_vertical">
+                                    <input type="radio" id="visual-picker-2" value="object" name="folder-options"
+                                        onchange={handleFolderTypeChange} checked={isFolderTypeObject} />
+                                    <label for="visual-picker-2">
+                                        <span class="slds-visual-picker__figure slds-visual-picker__text">
+                                            <span>
+                                                <span
+                                                    class="slds-text-heading_medium slds-m-bottom_x-small pretty-link">One
+                                                    Folder per {objectLabel}</span>
+                                                <span class="slds-text-title">Every {objectLabel} gets its own
+                                                    folder.</span>
+                                            </span>
+                                        </span>
+                                        <lightning-icon icon-name="utility:check" size="x-small" variant="inverse"
+                                            class="slds-visual-picker__text-check"></lightning-icon>
+                                    </label>
+                                </div>
+                                <div class="slds-visual-picker slds-visual-picker_vertical">
+                                    <input type="radio" id="visual-picker-3" value="related" name="folder-options"
+                                        onchange={handleFolderTypeChange} checked={isFolderTypeRelated} />
+                                    <label for="visual-picker-3">
+                                        <span class="slds-visual-picker__figure slds-visual-picker__text">
+                                            <span>
+                                                <span
+                                                    class="slds-text-heading_medium slds-m-bottom_x-small pretty-link">One
+                                                    Folder per Related Object</span>
+                                                <span class="slds-text-title">Use parent and child folders to add Quip
+                                                    documents to a related object's folder. For example, add Opportunity
+                                                    Notes to an Account folder.</span>
+                                            </span>
+                                        </span>
+                                        <lightning-icon icon-name="utility:check" size="x-small" variant="inverse"
+                                            class="slds-visual-picker__text-check"></lightning-icon>
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="slds-m-top_large">
+                            <div class="standard-width grey-background slds-p-top_x-small slds-p-bottom_medium slds-p-horizontal_medium slds-text-align_left"
+                                if:true={folderType}>
+                                <lightning-radio-group name="folderCreateChoice" label="Destination Folder"
+                                    type="button" options={folderCreateChoices} value={folderCreateChoice}
+                                    onchange={handleFolderCreateChoiceChange} required>
+                                </lightning-radio-group>
+                                <div if:true={isFolderChoiceCreate} class="slds-p-top_x-small">
+                                    <lightning-input type="text" name="folderName"
+                                        label="New Folder Name" value={folderName} onchange={handleFolderNameChange}
+                                        placeholder="Enter a folder name…" if:true={isFolderTypeOne} required>
+                                    </lightning-input>
+                                    <lightning-input type="text" name="folderName" label="New Parent Folder Name"
+                                        value={folderName} onchange={handleFolderNameChange}
+                                        placeholder="Enter a parent folder name…" if:false={isFolderTypeOne} required>
+                                    </lightning-input>
+                                </div>
+                                <div if:false={isFolderChoiceCreate} class="slds-p-top_x-small">
+                                    <lightning-input type="text" name="folderName" label="Folder URL" value={folderName}
+                                        onchange={handleFolderNameChange} placeholder="Enter a folder URL…"
+                                        if:true={isFolderTypeOne} required>
+                                    </lightning-input>
+                                    <lightning-input type="text" name="folderName" label="Parent Folder URL"
+                                        value={folderName} onchange={handleFolderNameChange}
+                                        placeholder="Enter a parent folder URL…" if:false={isFolderTypeOne} required>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-m-top_x-small" if:true={isFolderChoiceCreate}>
+                                    <p>The new folder will be created in your Private folder. You can then share it, or
+                                        move it to a shared folder if you wish to give full access to other users.</p>
+                                </div>
+                                <div class="slds-m-top_x-small" if:false={isFolderChoiceCreate}>
+                                    <p>Any newly created documents will inherit the permissions of the parent folder.</p>
+                                </div>
+                            </div>
+
+                            <div class="standard-width grey-background slds-p-bottom_medium slds-p-horizontal_medium slds-text-align_left"
+                                if:true={isFolderTypeRelated}>
+                                <lightning-combobox name="relatedObject" label="Related Object"
+                                    value={folderRelatedObject} options={relatedObjects}
+                                    onchange={handleFolderRelatedObjectChange} placeholder="Select a related object…"
+                                    required></lightning-combobox>
+                            </div>
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="4" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Just Double Checking&hellip;</h3>
+                        <p>The setup will be carried out when you click Next.</p>
+
+                        <div class="slds-m-top_large slds-text-align_left">
+                            <div class="slds-media slds-media_center slds-m-bottom_large"
+                                style="align-items: flex-start;" for:each={verificationSteps} for:item="step"
+                                key={step.key}>
+                                <div class="slds-media__figure">
+                                    <div class="slds-progress-ring slds-progress-ring_large">
+                                        <div class="slds-progress-ring__progress" role="progressbar" aria-valuemin="0"
+                                            aria-valuemax="100" aria-valuenow="0">
+                                        </div>
+                                        <div class="slds-progress-ring__content">{step.key}</div>
+                                    </div>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div>{step.text}</div>
+                                    <div class="slds-text-title" if:true={step.description}>{step.description}</div>
+                                    <template if:true={preflightChecksRunning}>
+                                        <template if:true={step.preflightCheck}>
+                                            <div class="check-text slds-m-vertical_medium"
+                                                if:true={step.preflightCheck.loading}>
+                                                <div class="slds-m-right_small"
+                                                    style="width: 20px; position: relative;">
+                                                    <lightning-spinner alternative-text="Loading" size="small">
+                                                    </lightning-spinner>
+                                                </div>
+                                                <span>Checking&hellip;</span>
+                                            </div>
+                                            <template if:false={step.preflightCheck.loading}>
+                                                <template if:false={step.preflightCheck.error}>
+                                                    <div class="slds-text-title slds-text-color_success check-text slds-m-vertical_x-small"
+                                                        if:true={step.preflightCheck.result}>
+                                                        <lightning-icon icon-name="utility:success" variant="success"
+                                                            class="slds-m-right_small" size="x-small"></lightning-icon>
+                                                        <span>{step.checkTrue}</span>
+                                                    </div>
+                                                    <div class="slds-text-title slds-text-color_success check-text slds-m-vertical_x-small"
+                                                        if:false={step.preflightCheck.result}>
+                                                        <lightning-icon icon-name="utility:success" variant="success"
+                                                            class="slds-m-right_small" size="x-small"></lightning-icon>
+                                                        <span>{step.checkFalse}</span>
+                                                    </div>
+                                                </template>
+                                                <div class="slds-text-title slds-text-color_error check-text slds-m-vertical_x-small"
+                                                    if:true={step.preflightCheck.error}>
+                                                    <lightning-icon icon-name="utility:error" variant="error"
+                                                        class="slds-m-right_small" size="x-small"></lightning-icon>
+                                                    <span>{step.preflightCheck.error}</span>
+                                                </div>
+                                            </template>
+                                        </template>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="standard-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large"
+                            if:false={isPreflightCheckError}>
+                            Do you want to learn more about this setup before proceeding? <a
+                                href="https://quip.com/DjymAUmx7LCB" target="_blank">Tell Me More</a>.
+                        </div>
+
+                        <div class="standard-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large"
+                            if:true={isPreflightCheckError}>
+                            Having trouble with this setup?<br />
+                            To move embedded documents to folders, review the steps and fix any errors. Or,
+                            take a look at our <a href="https://quip.com/DjymAUmx7LCB" target="_blank">troubleshooting
+                                guide</a>.
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="5" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Creating Folder Structure&hellip;
+                        </h3>
+                        <p>Hang in there! This might take a minute.</p>
+
+                        <div class="flex-spinner">
+                            <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+                            </lightning-spinner>
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="6" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Folder Structure Setup Complete
+                        </h3>
+                        <p>Your folder automation is ready to deploy to your organization.</p>
+
+                        <div class="slds-m-top_large" style="display: flex; align-items: center;"
+                            if:true={lastRunTimestamp}>
+                            <p class="slds-m-right_small">Looks like you completed this setup on {lastRunTime} for
+                                the {objectLabel} object.</p>
+                            <lightning-button label="Start Again" title="Start Again" variant="brand"
+                                onclick={handleStartAgain}>
+                            </lightning-button>
+                        </div>
+
+                        <div class="large-width grey-background slds-m-top_large slds-text-align_left column-table">
+                            <div class="slds-p-around_medium">
+                                <lightning-icon icon-name="standard:quip" size="large" class="slds-m-right_medium">
+                                </lightning-icon>
+                                <div>
+                                    <div class="slds-text-title_bold">Check Out Your Folder in Quip</div>
+                                    <div>Embedded documents are automatically added to this folder.</div>
+                                </div>
+                                <a href={outputFolderUrl} class="pretty-link" target="_blank">
+                                    <lightning-button class="slds-m-left_medium" label="Go to Quip Folder"
+                                        icon-position="right" icon-name="utility:new_window"></lightning-button>
+                                </a>
+                            </div>
+                            <div class="slds-p-around_medium">
+                                <lightning-icon icon-name="standard:flow" size="large" class="slds-m-right_medium">
+                                </lightning-icon>
+                                <div>
+                                    <div class="slds-text-title_bold">Customize Automation Conditions</div>
+                                    <div>View your folder automation, adjust the conditions in Flow. The Flow is
+                                        called <b>{flowLabel}</b></div>
+                                </div>
+                                <a href="/lightning/setup/Flows/home" class="pretty-link" target="_blank">
+                                    <lightning-button class="slds-m-left_medium" label="Go to Flow"
+                                        icon-position="right" icon-name="utility:new_window"></lightning-button>
+                                </a>
+                            </div>
+                            <div class="slds-p-around_medium">
+                                <lightning-icon icon-name="standard:process" size="large" class="slds-m-right_medium">
+                                </lightning-icon>
+                                <div>
+                                    <div class="slds-text-title_bold">Customize Flow Trigger</div>
+                                    <div>Take a look at the process triggering the flow, it's called <b>{flowLabel}
+                                            (Trigger)</b></div>
+                                </div>
+                                <a href="/lightning/setup/ProcessAutomation/home" class="pretty-link" target="_blank">
+                                    <lightning-button class="slds-m-left_medium" label="Go to Process Builder"
+                                        icon-position="right" icon-name="utility:new_window"></lightning-button>
+                                </a>
+                            </div>
+                            <div class="slds-p-around_medium">
+                                <lightning-icon icon-name="custom:custom108" size="large" class="slds-m-right_medium">
+                                </lightning-icon>
+                                <div>
+                                    <div class="slds-text-title_bold">Review Folder Automation Setup</div>
+                                    <div>Learn more about using Quip actions in Lightning Flow to move a document to a
+                                        folder.</div>
+                                </div>
+                                <a class="pretty-link" href="https://quip.com/DjymAUmx7LCB" target="_blank">
+                                    <lightning-button class="slds-m-left_medium" label="Tell Me More"
+                                        icon-position="right" icon-name="utility:new_window"></lightning-button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </c-step-wrapper>
+            </div>
+            <footer if:false={lastRunTimestamp}>
+                <lightning-button label="Back" title="Back" class="back" if:false={isFirstStep} onclick={handleBack}
+                    disabled={isBackDisabled}>
+                </lightning-button>
+                <div class="progress">
+                    <lightning-progress-indicator current-step={highlightedStep} type="base" variant="base">
+                        <lightning-progress-step key={step.id} label={step.label} value={step.id}
+                            for:each={visibleSteps} for:item="step"></lightning-progress-step>
+                    </lightning-progress-indicator>
+                </div>
+                <template if:true={isFirstStep}>
+                    <lightning-button variant="brand" label="Start" title="Start" class="next" onclick={handleNext}
+                        disabled={isNextDisabled}></lightning-button>
+                </template>
+                <template if:false={isFirstStep}>
+                    <lightning-button variant="brand" label="Next" title="Next" class="next" if:false={isLastStep}
+                        onclick={handleNext} disabled={isNextDisabled}></lightning-button>
+                    <lightning-button variant="brand" label="Done" title="Done" class="next" if:true={isLastStep}
+                        onclick={handleFinish}></lightning-button>
+                </template>
+            </footer>
+        </div>
+    </c-section-wrapper>
+</template>

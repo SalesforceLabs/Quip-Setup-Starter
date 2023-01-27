@@ -1,0 +1,16 @@
+.wrapper {
+    display: flex;
+    height: 100%;
+}
+
+c-authenticate-component {
+    flex: 1;
+}
+
+.checking-auth {
+    flex: 1;
+    position: relative;
+    background: #FFFFFF;
+    border-radius: 5px;
+    overflow: hidden;
+}

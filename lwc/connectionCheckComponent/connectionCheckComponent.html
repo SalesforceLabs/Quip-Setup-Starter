@@ -1,0 +1,89 @@
+<template>
+    <c-section-wrapper>
+        <div class="main">
+            <div>
+                <c-step-wrapper step="1" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Check your Quip Connection</h3>
+                        <p>Bring your free-form content and Salesforce data together with Quip for Customer 360. To use
+                            Salesforce integrations with Quip, make sure that your Quip site and Salesforce account are
+                            connected.</p>
+                        <img src={homeImage} alt="Messaging" style="max-height: 40vh;" />
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="2" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Review Your Quip Setup</h3>
+                        <p>Complete these connection steps to use Quip for Customer 360 starter features.</p>
+
+                        <div class="large-width grey-background slds-m-top_large slds-text-align_left column-table">
+                            <div class="slds-p-around_medium">
+                                <lightning-icon icon-name="standard:settings" size="large" class="slds-m-right_medium">
+                                </lightning-icon>
+                                <div>
+                                    <div class="slds-text-title_bold">Connect Quip to Salesforce</div>
+                                    <div></div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <a href="/lightning/setup/SalesforceAnywhereSetupPage/home" target="_blank" class="pretty-link" style="margin-bottom: 5px;">
+                                        <lightning-button class="slds-m-left_medium" label="Connect Quip"
+                                            icon-position="right" icon-name="utility:new_window"></lightning-button>
+                                    </a>
+                                    <a class="pretty-link" href="https://help.salesforce.com/articleView?id=quip_setup.htm&type=5" target="_blank">
+                                        <lightning-button class="slds-m-left_medium" label="Tell Me More"
+                                            icon-position="right" icon-name="utility:new_window"></lightning-button>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="slds-p-around_medium">
+                                <lightning-icon icon-name="custom:custom19" size="large" class="slds-m-right_medium">
+                                </lightning-icon>
+                                <div>
+                                    <div class="slds-text-title_bold">Set Salesforce Permissions</div>
+                                    <div>Assign the Quip permission set to grant your Salesforce users access to Quip.</div>
+                                </div>
+                                <a href="/lightning/setup/PermSets/home" target="_blank" class="pretty-link">
+                                    <lightning-button class="slds-m-left_medium" label="Assign Permissions" icon-position="right"
+                                        icon-name="utility:new_window"></lightning-button>
+                                </a>
+                            </div>
+                            <div class="slds-p-around_medium">
+                                <lightning-icon icon-name="standard:user_role" size="large" class="slds-m-right_medium">
+                                </lightning-icon>
+                                <div>
+                                    <div class="slds-text-title_bold">Give your Team Access to Quip</div>
+                                    <div>Add users to your Quip site or give access to everyone from a Salesforce org.</div>
+                                </div>
+                                <a class="pretty-link" href="https://admin.quip.com/" target="_blank">
+                                    <lightning-button class="slds-m-left_medium" label="Open Quip Admin Console" icon-position="right"
+                                        icon-name="utility:new_window"></lightning-button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </c-step-wrapper>
+            </div>
+            <footer>
+                <lightning-button label="Back" title="Back" class="back" if:false={isFirstStep} onclick={handleBack}
+                    disabled={isBackDisabled}>
+                </lightning-button>
+                <div class="progress">
+                    <lightning-progress-indicator current-step={highlightedStep} type="base" variant="base">
+                        <lightning-progress-step key={step.id} label={step.label} value={step.id}
+                            for:each={visibleSteps} for:item="step"></lightning-progress-step>
+                    </lightning-progress-indicator>
+                </div>
+                <template if:true={isFirstStep}>
+                    <lightning-button variant="brand" label="Start" title="Start" class="next" onclick={handleNext}
+                        disabled={isNextDisabled}></lightning-button>
+                </template>
+                <template if:false={isFirstStep}>
+                    <lightning-button variant="brand" label="Next" title="Next" class="next" if:false={isLastStep}
+                        onclick={handleNext} disabled={isNextDisabled}></lightning-button>
+                    <lightning-button variant="brand" label="Done" title="Done" class="next" if:true={isLastStep}
+                        onclick={handleFinish}></lightning-button>
+                </template>
+            </footer>
+        </div>
+    </c-section-wrapper>
+</template>

@@ -1,0 +1,517 @@
+<template>
+    <c-section-wrapper>
+        <div class="main flex-spinner" if:false={lastRunLoaded}>
+            <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+            </lightning-spinner>
+        </div>
+        <div class="main" if:true={lastRunLoaded}>
+            <div>
+                <c-step-wrapper step="1" current={currentStep}>
+                    <div class="step-content" if:true={isDataFeed}>
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Set Up Live Data Feed</h3>
+                        <p>Get live alerts when a deal is closed. Create a live data feed in a Quip document to share
+                            real-time events with your team.</p>
+                        <img src={liveFeedHomeImage} alt="Messaging" style="max-height: 40vh;" />
+                        <p class="slds-text-align_left">
+                            To set up a live data feed, we need to:<br />
+                            1. Set alert conditions<br />
+                            2. Create an alert template<br />
+                            3. Send alerts to a Quip document to share with users
+                        </p>
+                        <div
+                            class="large-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large">
+                            Do you want to learn more about this setup before proceeding? <a
+                                href="https://quip.com/rW7qAb3RzeS9" target="_blank">Tell Me More</a>.
+                        </div>
+                    </div>
+                    <div class="step-content" if:true={isDocNotifications}>
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Send Document Notifications</h3>
+                        <p>Keep your users up-to-date with notifications inside of a Quip document. Send a notification
+                            to users added to the document when something changes.</p>
+                        <img src={docNotificationsHomeImage} alt="Messaging" style="max-height: 40vh;" />
+                        <p class="slds-text-align_left">
+                            To send notifications in a document, we need to:<br />
+                            1. Set notification conditions<br />
+                            2. Create a notification template<br />
+                            3. Select Quip document
+                        </p>
+                        <div
+                            class="large-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large">
+                            Do you want to learn more about this setup before proceeding? <a
+                                href="https://quip.com/NmRtArhm77t4" target="_blank">Tell Me More</a>.
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="2" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Select Object Type
+                        </h3>
+                        <p>To send notifications in a Quip document when something changes, choose the object that
+                            they're linked to.</p>
+
+                        <fieldset class="slds-form-element slds-m-top_large">
+                            <div class="slds-form-element__control">
+                                <div class="slds-visual-picker slds-visual-picker_medium">
+                                    <input type="radio" id="visual-picker-7" value="opportunity" name="object-options"
+                                        onchange={handleObjectTypeChange} checked={isObjectTypeOpportunity} />
+                                    <label for="visual-picker-7">
+                                        <span
+                                            class="slds-visual-picker__figure slds-visual-picker__icon slds-align_absolute-center">
+                                            <span class="slds-is-selected">
+                                                <lightning-icon icon-name="action:check" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                            <span class="slds-is-not-selected">
+                                                <lightning-icon icon-name="standard:opportunity" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                        </span>
+                                        <span class="slds-visual-picker__body">
+                                            <span class="slds-text-heading_small pretty-link">Opportunity</span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="slds-visual-picker slds-visual-picker_medium">
+                                    <input type="radio" id="visual-picker-9" value="case" name="object-options"
+                                        onchange={handleObjectTypeChange} checked={isObjectTypeCase} />
+                                    <label for="visual-picker-9">
+                                        <span
+                                            class="slds-visual-picker__figure slds-visual-picker__icon slds-align_absolute-center">
+                                            <span class="slds-is-selected">
+                                                <lightning-icon icon-name="action:check" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                            <span class="slds-is-not-selected">
+                                                <lightning-icon icon-name="standard:case" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                        </span>
+                                        <span class="slds-visual-picker__body">
+                                            <span class="slds-text-heading_small pretty-link">Case</span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="slds-visual-picker slds-visual-picker_medium">
+                                    <input type="radio" id="visual-picker-8" value="custom" name="object-options"
+                                        onchange={handleObjectTypeChange} checked={isObjectTypeCustom} />
+                                    <label for="visual-picker-8">
+                                        <span
+                                            class="slds-visual-picker__figure slds-visual-picker__icon slds-align_absolute-center">
+                                            <span class="slds-is-selected">
+                                                <lightning-icon icon-name="action:check" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                            <span class="slds-is-not-selected">
+                                                <lightning-icon icon-name="custom:custom8" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                        </span>
+                                        <span class="slds-visual-picker__body">
+                                            <span class="slds-text-heading_small pretty-link">Other
+                                                Object</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="standard-width grey-background slds-p-top_x-small slds-p-bottom_medium slds-p-horizontal_medium slds-text-align_left slds-m-top_large"
+                            if:true={isObjectTypeCustom}>
+                            <lightning-combobox name="customObject" label="Object" value={objectName}
+                                options={orgObjects} onchange={handleObjectNameChange} placeholder="Select an object…"
+                                required></lightning-combobox>
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="3" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Set Notification Conditions</h3>
+                        <p if:true={isDataFeed}>Setup the criteria for your live data feed</p>
+                        <p if:true={isDocNotifications}>Define the criteria for when to send a document notification.
+                        </p>
+
+                        <fieldset class="slds-form-element slds-m-top_large">
+                            <div class="slds-form-element__control">
+                                <div class="slds-visual-picker slds-visual-picker_vertical slds-m-bottom_medium">
+                                    <input type="radio" id="criteria-visual-picker-1" value="new-record"
+                                        name="criteria-options" onchange={handleCriteriaTypeChange}
+                                        checked={isCriteriaTypeRecord} />
+                                    <label for="criteria-visual-picker-1">
+                                        <span class="slds-visual-picker__figure slds-visual-picker__text auto-height">
+                                            <span>
+                                                <span
+                                                    class="slds-text-heading_medium slds-m-bottom_x-small pretty-link">New
+                                                    Record</span>
+                                                <span class="slds-text-title">When a new {objectName} record is
+                                                    created</span>
+                                            </span>
+                                        </span>
+                                        <lightning-icon icon-name="utility:check" size="x-small" variant="inverse"
+                                            class="slds-visual-picker__text-check"></lightning-icon>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="slds-form-element__control">
+                                <div class="slds-visual-picker slds-visual-picker_vertical slds-m-bottom_medium">
+                                    <input type="radio" id="criteria-visual-picker-2" value="field-change"
+                                        name="criteria-options" onchange={handleCriteriaTypeChange}
+                                        checked={isCriteriaTypeField} />
+                                    <label for="criteria-visual-picker-2">
+                                        <span class="slds-visual-picker__figure slds-visual-picker__text auto-height">
+                                            <span>
+                                                <span
+                                                    class="slds-text-heading_medium slds-m-bottom_x-small pretty-link">Field
+                                                    Change</span>
+                                                <span class="slds-text-title">When a field is changed</span>
+                                            </span>
+                                        </span>
+                                        <lightning-icon icon-name="utility:check" size="x-small" variant="inverse"
+                                            class="slds-visual-picker__text-check"></lightning-icon>
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="standard-width grey-background slds-p-top_x-small slds-p-bottom_medium slds-p-horizontal_medium slds-text-align_left slds-m-top_large"
+                            if:true={isCriteriaTypeField}>
+                            <lightning-combobox name="criteriaField" label="Field" value={criteriaFieldName}
+                                options={objectFieldOptions} onchange={handleCriteriaFieldChange}
+                                placeholder="Select a field…" required></lightning-combobox>
+                        </div>
+
+                        <div class="standard-width grey-background slds-p-top_x-small slds-p-bottom_medium slds-p-horizontal_medium slds-text-align_left"
+                            if:true={criteriaFieldName}>
+                            <lightning-radio-group name="fieldChangeType" label="Notify me…"
+                                options={fieldChangeTypeOptions} value={criteriaFieldChangeType}
+                                onchange={handleCriteriaFieldChangeType} type="radio"></lightning-radio-group>
+                        </div>
+
+                        <template if:true={isCriteriaFieldChangeTypeCondition}>
+                            <div class="standard-width grey-background slds-p-top_x-small slds-p-bottom_medium slds-p-horizontal_medium slds-text-align_left"
+                                if:true={isCriteriaFieldTypeBoolean}>
+                                <lightning-combobox name="criteriaFieldBooleanValue" label="When the field changes to"
+                                    value={criteriaFieldValue} options={booleanOptions}
+                                    onchange={handleCriteriaFieldValueChange} placeholder="Select an option…" required>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="standard-width grey-background slds-p-top_x-small slds-p-bottom_medium slds-p-horizontal_medium slds-text-align_left"
+                                if:true={isCriteriaFieldTypePicklist}>
+                                <lightning-combobox name="criteriaFieldPicklistValue" label="When the field changes to"
+                                    value={criteriaFieldValue} options={picklistFieldOptions}
+                                    onchange={handleCriteriaFieldValueChange} placeholder="Select an option…" required>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="standard-width grey-background slds-p-bottom_medium slds-p-horizontal_medium slds-text-align_left multi-field-box"
+                                if:true={isCriteriaFieldTypeString}>
+                                <lightning-combobox name="criteriaFieldOperator" label="Operator"
+                                    value={criteriaFieldOperator} options={stringOperatorOptions}
+                                    onchange={handleCriteriaFieldOperatorChange} placeholder="Select an option……"
+                                    class="slds-m-right_x-small" required>
+                                </lightning-combobox>
+                                <lightning-input type={criteriaOperatorValueType} label="Value"
+                                    value={criteriaFieldValue} onchange={handleCriteriaFieldValueChange}
+                                    class="slds-m-left_x-small" if:false={isCriteriaOperatorValueTypeBoolean} required>
+                                </lightning-input>
+                                <lightning-combobox name="criteriaFieldOperatorValue" label="Value"
+                                    value={criteriaFieldValue} options={booleanOptions}
+                                    onchange={handleCriteriaFieldValueChange} placeholder="Select an option…"
+                                    class="slds-m-right_x-small" if:true={isCriteriaOperatorValueTypeBoolean} required>
+                                </lightning-combobox>
+                            </div>
+
+                            <div class="standard-width grey-background slds-p-bottom_medium slds-p-horizontal_medium slds-text-align_left multi-field-box"
+                                if:true={isCriteriaFieldTypeDate}>
+                                <lightning-combobox name="criteriaFieldOperator" label="Operator"
+                                    value={criteriaFieldOperator} options={dateOperatorOptions}
+                                    onchange={handleCriteriaFieldOperatorChange} placeholder="Select an option…"
+                                    class="slds-m-right_x-small" required>
+                                </lightning-combobox>
+                                <lightning-input type={criteriaOperatorValueType} label="Value"
+                                    value={criteriaFieldValue} onchange={handleCriteriaFieldValueChange}
+                                    class="slds-m-left_x-small" if:false={isCriteriaOperatorValueTypeBoolean} required>
+                                </lightning-input>
+                                <lightning-combobox name="criteriaFieldOperatorValue" label="Value"
+                                    value={criteriaFieldValue} options={booleanOptions}
+                                    onchange={handleCriteriaFieldValueChange} placeholder="Select an option…"
+                                    class="slds-m-right_x-small" if:true={isCriteriaOperatorValueTypeBoolean} required>
+                                </lightning-combobox>
+                            </div>
+                            <div class="standard-width grey-background slds-p-bottom_medium slds-p-horizontal_medium slds-text-align_left multi-field-box"
+                                if:true={isCriteriaFieldTypeNumeric}>
+                                <lightning-combobox name="criteriaFieldOperator" label="Operator"
+                                    value={criteriaFieldOperator} options={numericOperatorOptions}
+                                    onchange={handleCriteriaFieldOperatorChange} placeholder="Select an option…"
+                                    class="slds-m-right_x-small" required>
+                                </lightning-combobox>
+                                <lightning-input type={criteriaOperatorValueType} label="Value"
+                                    value={criteriaFieldValue} onchange={handleCriteriaFieldValueChange}
+                                    class="slds-m-left_x-small" if:false={isCriteriaOperatorValueTypeBoolean} required>
+                                </lightning-input>
+                                <lightning-combobox name="criteriaFieldOperatorValue" label="Value"
+                                    value={criteriaFieldValue} options={booleanOptions}
+                                    onchange={handleCriteriaFieldValueChange} placeholder="Select an option…"
+                                    class="slds-m-right_x-small" if:true={isCriteriaOperatorValueTypeBoolean} required>
+                                </lightning-combobox>
+                            </div>
+                        </template>
+
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="4" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Create a Notification Template
+                        </h3>
+                        <p if:true={isDataFeed}>Define your Live Data Feed Message</p>
+                        <p if:true={isDocNotifications}>Write a custom notification message or use a sample template to
+                            send to your users.</p>
+
+                        <lightning-radio-group
+                            name="send-notification"
+                            label="Send Notification"
+                            options={notificationOptions}
+                            value={notifyEveryone}
+                            required
+                            type="radio"
+                            class="slds-m-top_large slds-text-align_left"
+                            onchange={handleNotificationChange} ></lightning-radio-group>
+
+                        <p class="standard-width slds-m-top_large">Use a sample template to get started.</p>
+
+                        <div class="slds-m-vertical_small">
+                            <lightning-button label={templateCreateButtonLabel} title={templateCreateButtonLabel}
+                                icon-name="utility:copy" class="slds-m-horizontal_x-small"
+                                if:true={isCriteriaTypeRecord} onclick={fillInRecordCreatedTemplate}></lightning-button>
+                            <lightning-button label="Opportunity Closed Template" title="Opportunity Closed Template"
+                                icon-name="utility:copy" class="slds-m-horizontal_x-small" if:true={isOpportunityClosed}
+                                onclick={fillInOpportunityClosedTemplate}></lightning-button>
+                            <template if:false={isOpportunityClosed}>
+                                <lightning-button label={templateEditButtonLabel} title={templateEditButtonLabel}
+                                    icon-name="utility:copy" class="slds-m-horizontal_x-small"
+                                    if:false={isCriteriaTypeRecord} onclick={fillInFieldChangeTemplate}>
+                                </lightning-button>
+                            </template>
+                        </div>
+
+                        <lightning-textarea onchange={handleContentChange} onkeyup={handleContentChange} value={message}
+                            class="standard-width slds-text-align_left text-area" id="text-notification-message"
+                            label="Notification Message"
+                            placeholder="Not sure what to type? Use a sample template, or enter your own message with formulas."
+                            required>
+                        </lightning-textarea>
+
+                        <div
+                            class="standard-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large">
+                            To make your message update dynamically based on the Salesforce record, use formulas. For
+                            example, to
+                            include the {objectName} name in your message, enter <b>[{objectName}].Name</b>. <a
+                                href="https://help.salesforce.com/articleView?id=how_do_i.htm&type=5"
+                                target="_blank">Tell Me More</a>.
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="5" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Message Destination</h3>
+                        <p if:true={isDocNotifications}>Choose where you want to send this notification.</p>
+                        <p if:true={isDataFeed}>To push an alert to a document, enter the Quip document URL.</p>
+
+                        <div if:true={isDataFeed}
+                            class="standard-width slds-text-align_left slds-m-top_large grey-background slds-p-top_x-small slds-p-bottom_medium slds-p-horizontal_medium">
+                            <lightning-input type="url" label="Quip Document URL" placeholder="Enter Quip document URL"
+                                onchange={handleDestinationUrlChange} value={destinationUrl}
+                                pattern="^https:\/\/[A-z0-9\-_\.]*quip\.com\/[A-z0-9]+\/?.*$"
+                                message-when-pattern-mismatch="The URL you entered does not appear to be a Quip URL"
+                                required></lightning-input>
+                        </div>
+
+                        <div if:true={isDocNotifications}
+                            class="standard-width slds-text-align_left slds-m-top_large grey-background slds-p-top_x-small slds-p-bottom_medium slds-p-horizontal_medium">
+                            <lightning-combobox name="destinationUrlCombobox" label="Quip Document URL Field"
+                                value={destinationUrlField} options={destinationUrlFields}
+                                onchange={handleDestinationUrlFieldChange}
+                                field-level-help="Custom Quip URL field. Use the Account Plan or Opportunity Notes custom fields, or use your own custom field that contains Quip in the field label or API name."
+                                placeholder="Select a field…" if:true={foundDestinationUrlFields} required>
+                            </lightning-combobox>
+                            <lightning-combobox name="destinationUrlCombobox" label="Quip URL Field"
+                                value={destinationUrlField} options={destinationUrlFields}
+                                onchange={handleDestinationUrlFieldChange}
+                                field-level-help="Custom Quip URL field. Use the Account Plan or Opportunity Notes custom fields, or use your own custom field that contains Quip in the field label or API name."
+                                placeholder="No fields found" if:false={foundDestinationUrlFields} required>
+                            </lightning-combobox>
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="6" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Just Double Checking&hellip;</h3>
+                        <p>The setup will be carried out when you click Next.</p>
+
+                        <div class="slds-m-top_large slds-text-align_left">
+                            <div class="slds-media slds-media_center slds-m-bottom_large"
+                                style="align-items: flex-start;" for:each={verificationSteps} for:item="step"
+                                key={step.key}>
+                                <div class="slds-media__figure">
+                                    <div class="slds-progress-ring slds-progress-ring_large">
+                                        <div class="slds-progress-ring__progress" role="progressbar" aria-valuemin="0"
+                                            aria-valuemax="100" aria-valuenow="0">
+                                        </div>
+                                        <div class="slds-progress-ring__content">{step.key}</div>
+                                    </div>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div>{step.text}</div>
+                                    <div class="slds-text-title" if:true={step.description}>{step.description}</div>
+                                    <template if:true={preflightChecksRunning}>
+                                        <template if:true={step.preflightCheck}>
+                                            <div class="check-text slds-m-vertical_medium"
+                                                if:true={step.preflightCheck.loading}>
+                                                <div class="slds-m-right_small"
+                                                    style="width: 20px; position: relative;">
+                                                    <lightning-spinner alternative-text="Loading" size="small">
+                                                    </lightning-spinner>
+                                                </div>
+                                                <span>Checking&hellip;</span>
+                                            </div>
+                                            <template if:false={step.preflightCheck.loading}>
+                                                <template if:false={step.preflightCheck.error}>
+                                                    <div class="slds-text-title slds-text-color_success check-text slds-m-vertical_x-small"
+                                                        if:true={step.preflightCheck.result}>
+                                                        <lightning-icon icon-name="utility:success" variant="success"
+                                                            class="slds-m-right_small" size="x-small"></lightning-icon>
+                                                        <span>{step.checkTrue}</span>
+                                                    </div>
+                                                    <div class="slds-text-title slds-text-color_success check-text slds-m-vertical_x-small"
+                                                        if:false={step.preflightCheck.result}>
+                                                        <lightning-icon icon-name="utility:success" variant="success"
+                                                            class="slds-m-right_small" size="x-small"></lightning-icon>
+                                                        <span>{step.checkFalse}</span>
+                                                    </div>
+                                                </template>
+                                                <div class="slds-text-title slds-text-color_error check-text slds-m-vertical_x-small"
+                                                    if:true={step.preflightCheck.error}>
+                                                    <lightning-icon icon-name="utility:error" variant="error"
+                                                        class="slds-m-right_small" size="x-small"></lightning-icon>
+                                                    <span>{step.preflightCheck.error}</span>
+                                                </div>
+                                            </template>
+                                        </template>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="standard-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large"
+                            if:false={isPreflightCheckError}>
+                            Do you want to learn more about this setup before proceeding? <a
+                                href="https://quip.com/rW7qAb3RzeS9" target="_blank" if:true={isDataFeed}>Tell Me
+                                More</a><a href="https://quip.com/NmRtArhm77t4" target="_blank"
+                                if:true={isDocNotifications}>Tell Me More</a>.
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="7" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;" if:true={isDataFeed}>Setting Up
+                            Live
+                            Data Feed&hellip;</h3>
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;" if:true={isDocNotifications}>
+                            Setting Up Document Notifications&hellip;</h3>
+                        <p>Hang in there! This might take a minute.</p>
+
+                        <div class="flex-spinner">
+                            <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+                            </lightning-spinner>
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="8" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Automation Up and Running</h3>
+                        <p if:true={isDocNotifications}>Your notifications are ready to be sent.</p>
+                        <p if:true={isDataFeed}>Live alerts when something changes in Salesforce are ready to deploy to
+                            your organization.</p>
+
+                        <div class="slds-m-top_large" style="display: flex; align-items: center;"
+                            if:true={lastRunTimestamp}>
+                            <p class="slds-m-right_small">Looks like you completed this setup on {lastRunTime} on
+                                the {objectLabel} object.</p>
+                            <lightning-button label="Start Again" title="Start Again" variant="brand"
+                                onclick={handleStartAgain}>
+                            </lightning-button>
+                        </div>
+
+                        <div class="large-width grey-background slds-m-top_large slds-text-align_left column-table">
+                            <div class="slds-p-around_medium" if:true={isDataFeed}>
+                                <lightning-icon icon-name="standard:quip" size="large" class="slds-m-right_medium">
+                                </lightning-icon>
+                                <div>
+                                    <div class="slds-text-title_bold">View your Live Data Feed document</div>
+                                    <div>See the document where live alerts are pushed to your users.</div>
+                                </div>
+                                <a href={destinationUrl} class="pretty-link" target="_blank">
+                                    <lightning-button class="slds-m-left_medium" label="Go to Quip Document"
+                                        icon-position="right" icon-name="utility:new_window"></lightning-button>
+                                </a>
+                            </div>
+                            <div class="slds-p-around_medium">
+                                <lightning-icon icon-name="standard:process" size="large" class="slds-m-right_medium">
+                                </lightning-icon>
+                                <div>
+                                    <div class="slds-text-title_bold">Customize your notification conditions</div>
+                                    <div>View your automation in Process Builder, it's called <b>{flowLabel}</b>
+                                    </div>
+                                </div>
+                                <a href="/lightning/setup/ProcessAutomation/home" class="pretty-link" target="_blank">
+                                    <lightning-button class="slds-m-left_medium" label="Go to Process Builder"
+                                        icon-position="right" icon-name="utility:new_window"></lightning-button>
+                                </a>
+                            </div>
+                            <div class="slds-p-around_medium">
+                                <lightning-icon icon-name="custom:custom108" size="large" class="slds-m-right_medium">
+                                </lightning-icon>
+                                <div>
+                                    <div class="slds-text-title_bold">Review Notification Automation Setup</div>
+                                    <div>Learn more about using Quip actions in Process Builder to send notifications.
+                                    </div>
+                                </div>
+                                <a class="pretty-link" href="https://quip.com/rW7qAb3RzeS9" target="_blank"
+                                    if:true={isDataFeed}>
+                                    <lightning-button class="slds-m-left_medium" label="Tell Me More"
+                                        icon-position="right" icon-name="utility:new_window"></lightning-button>
+                                </a>
+                                <a class="pretty-link" href="https://quip.com/NmRtArhm77t4" target="_blank"
+                                    if:true={isDocNotifications}>
+                                    <lightning-button class="slds-m-left_medium" label="Tell Me More"
+                                        icon-position="right" icon-name="utility:new_window"></lightning-button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </c-step-wrapper>
+            </div>
+            <footer if:false={lastRunTimestamp}>
+                <lightning-button label="Back" title="Back" class="back" if:false={isFirstStep} onclick={handleBack}
+                    disabled={isBackDisabled}>
+                </lightning-button>
+                <div class="progress">
+                    <lightning-progress-indicator current-step={highlightedStep} type="base" variant="base">
+                        <lightning-progress-step key={step.id} label={step.label} value={step.id}
+                            for:each={visibleSteps} for:item="step"></lightning-progress-step>
+                    </lightning-progress-indicator>
+                </div>
+                <template if:true={isFirstStep}>
+                    <lightning-button variant="brand" label="Start" title="Start" class="next" onclick={handleNext}
+                        disabled={isNextDisabled}></lightning-button>
+                </template>
+                <template if:false={isFirstStep}>
+                    <lightning-button variant="brand" label="Next" title="Next" class="next" if:false={isLastStep}
+                        onclick={handleNext} disabled={isNextDisabled}></lightning-button>
+                    <lightning-button variant="brand" label="Done" title="Done" class="next" if:true={isLastStep}
+                        onclick={handleFinish}></lightning-button>
+                </template>
+            </footer>
+        </div>
+    </c-section-wrapper>
+</template>

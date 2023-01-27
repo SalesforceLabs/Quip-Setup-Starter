@@ -1,0 +1,571 @@
+<template>
+    <c-section-wrapper>
+        <div class="main flex-spinner" if:false={lastRunLoaded}>
+            <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+            </lightning-spinner>
+        </div>
+        <div class="main" if:true={lastRunLoaded}>
+            <div>
+                <c-step-wrapper step="1" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Embed Account Plans In Your
+                            Accounts</h3>
+                        <p>Create an Account Plan template and embed it in your Salesforce Account records. Your users
+                            save time with fields that pre-populate based on the record, and you save time creating
+                            unique Account Plans for each Account.</p>
+                        <img src={homeImage} alt="Messaging" style="max-height: 40vh;" />
+                        <p class="slds-text-align_left">
+                            To start embedding Account Plans in your Accounts, we need to:<br />
+                            1. Create an Account Plan template<br />
+                            2. Embed the Account Plan in a record<br />
+                            3. Create a custom Account Plan field<br />
+                            4. Manage Account Plan access<br />
+                            5. Set Account Plan conditions
+                        </p>
+                        <div
+                            class="large-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large">
+                            Do you want to learn more about this setup before proceeding? <a
+                                href="https://quip.com/joX8A0pWzAoR" target="_blank">Tell me more</a>.
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="2" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Create Account Plan Template</h3>
+                        <p>Use our starter template or choose a template from your Quip site</p>
+
+                        <fieldset class="slds-form-element slds-m-top_large">
+                            <div class="slds-form-element__control">
+                                <div class="slds-visual-picker slds-visual-picker_vertical">
+                                    <input type="radio" id="visual-picker-1" value="default" name="template-options"
+                                        onchange={handleTemplateTypeChange} checked={isTemplateTypeDefault} />
+                                    <label for="visual-picker-1">
+                                        <span class="slds-visual-picker__figure slds-visual-picker__text">
+                                            <span>
+                                                <span
+                                                    class="slds-text-heading_medium slds-m-bottom_x-small pretty-link">Starter
+                                                    Template</span>
+                                                <span class="slds-text-title">Get started with our <a
+                                                        href="https://quip.com/templates/account-plan"
+                                                        target="_blank">Account Plan
+                                                        template</a>. You can customize it in Quip.</span>
+                                            </span>
+                                        </span>
+                                        <lightning-icon icon-name="utility:check" size="x-small" variant="inverse"
+                                            class="slds-visual-picker__text-check"></lightning-icon>
+                                    </label>
+                                </div>
+                                <div class="slds-visual-picker slds-visual-picker_vertical">
+                                    <input type="radio" id="visual-picker-2" value="custom" name="template-options"
+                                        onchange={handleTemplateTypeChange} checked={isTemplateTypeCustom} />
+                                    <label for="visual-picker-2">
+                                        <span class="slds-visual-picker__figure slds-visual-picker__text">
+                                            <span>
+                                                <span
+                                                    class="slds-text-heading_medium slds-m-bottom_x-small pretty-link">Custom
+                                                    Template</span>
+                                                <span class="slds-text-title">Use your own Quip Account Plan
+                                                    template.</span>
+                                            </span>
+                                        </span>
+                                        <lightning-icon icon-name="utility:check" size="x-small" variant="inverse"
+                                            class="slds-visual-picker__text-check"></lightning-icon>
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="standard-width slds-text-align_left slds-m-top_large grey-background slds-p-top_x-small slds-p-bottom_medium slds-p-horizontal_medium"
+                            if:true={customTemplateUrlVisible}>
+                            <lightning-input type="url" label="Enter your Quip Account Plan URL"
+                                placeholder="Paste your Quip URL here" onchange={handleTemplateUrlChange}
+                                value={templateUrl} pattern="^https:\/\/[A-z0-9\-_\.]*quip\.com\/[A-z0-9]+\/?.*$"
+                                message-when-pattern-mismatch="The URL you entered does not appear to be a Quip template URL"
+                                required></lightning-input>
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="3" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Embed Account Plan in a Record
+                        </h3>
+                        <p>To add your Account Plan to a Salesforce record, choose an object.</p>
+
+                        <fieldset class="slds-form-element slds-m-top_large">
+                            <div class="slds-form-element__control">
+                                <div class="slds-visual-picker slds-visual-picker_medium">
+                                    <input type="radio" id="visual-picker-3" value="account" name="object-options"
+                                        onchange={handleObjectTypeChange} checked={isObjectTypeAccount} />
+                                    <label for="visual-picker-3">
+                                        <span
+                                            class="slds-visual-picker__figure slds-visual-picker__icon slds-align_absolute-center">
+                                            <span class="slds-is-selected">
+                                                <lightning-icon icon-name="action:check" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                            <span class="slds-is-not-selected">
+                                                <lightning-icon icon-name="standard:account" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                        </span>
+                                        <span class="slds-visual-picker__body">
+                                            <span class="slds-text-heading_small pretty-link">Account</span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="slds-visual-picker slds-visual-picker_medium">
+                                    <input type="radio" id="visual-picker-4" value="custom" name="object-options"
+                                        onchange={handleObjectTypeChange} checked={isObjectTypeCustom} />
+                                    <label for="visual-picker-4">
+                                        <span
+                                            class="slds-visual-picker__figure slds-visual-picker__icon slds-align_absolute-center">
+                                            <span class="slds-is-selected">
+                                                <lightning-icon icon-name="action:check" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                            <span class="slds-is-not-selected">
+                                                <lightning-icon icon-name="custom:custom8" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                        </span>
+                                        <span class="slds-visual-picker__body">
+                                            <span class="slds-text-heading_small pretty-link">Other
+                                                Object</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="standard-width grey-background slds-p-top_x-small slds-p-bottom_medium slds-p-horizontal_medium slds-text-align_left slds-m-top_large"
+                            if:true={isObjectTypeCustom}>
+                            <lightning-combobox name="customObject" label="Object" value={objectName}
+                                options={orgObjects} onchange={handleObjectNameChange} placeholder="Select an Object…"
+                                required></lightning-combobox>
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="4" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Add Account Plan to Record Page
+                        </h3>
+                        <p>Create a custom field for your Account Plan on your record page. Add an Account Plan tab to
+                            the layout.</p>
+                        <img src={tabSampleImage} alt="Messaging" style="max-height: 200px;" class="slds-m-top_large" />
+
+                        <div class="standard-width slds-text-align_left slds-m-top_large">
+                            <template if:false={loadingRecordPages}>
+                                <lightning-combobox name="recordPage" label="Embed the Account Plan in a record page:"
+                                    value={recordPageName} options={recordPages} onchange={handleRecordPageChange}
+                                    placeholder="Select a record page…" required if:false={noRecordPages}>
+                                </lightning-combobox>
+                                <lightning-combobox name="recordPage" label="Embed the Account Plan in a record page:"
+                                    value={recordPageName} options={recordPages}
+                                    placeholder="No pages found for this object" required disabled
+                                    if:true={noRecordPages}></lightning-combobox>
+                            </template>
+                            <lightning-combobox name="recordPage" label="Embed the Account Plan in a record page:"
+                                value={recordPageName} options={recordPages} onchange={handleRecordPageChange}
+                                placeholder="Loading record pages…" required disabled if:true={loadingRecordPages}>
+                            </lightning-combobox>
+                            <div style="display: flex; align-items: center;" class="slds-m-top_x-small">
+                                <lightning-input type="checkbox" label="Activate record page later"
+                                    name="copyRecordPage" onchange={handleRecordPageCopyChange}
+                                    checked={recordPageCopy}>
+                                </lightning-input>
+                                <c-tooltip
+                                    text="To manually activate your updated record page, create a copy. You can find the copy in the object's Lightning Record Pages.">
+                                </c-tooltip>
+                            </div>
+                        </div>
+
+                        <div class="standard-width slds-text-align_left slds-m-top_x-small">
+                            <lightning-input type="text" label="Custom Field and Tab Name"
+                                onchange={handleTabNameChange} value={tabName} class="tab-name-input"
+                                placeholder="Enter a name…" required>
+                            </lightning-input>
+                        </div>
+
+                        <div class="standard-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large"
+                            if:true={noRecordPages}>
+                            It looks like the {objectNameLabel} object doesn't have any Lightning record pages.<br />
+                            To add one, go to any {objectNameLabel} record. Click Setup, Edit Page, and then
+                            Save and Activate. This adds a record page for {objectNameLabel}. After you add one, come
+                            back
+                            and try again.
+                        </div>
+
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="5" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Manage Account Plan Access
+                        </h3>
+                        <p>Set the company level of access for Account Plans embedded in a record.</p>
+
+                        <div class="standard-width slds-text-align_left slds-m-top_large">
+                            <lightning-radio-group name="accessRadios" label="Company Level Access"
+                                options={sharingOptions} value={sharingOption} onchange={handleSharingOptionSelect}
+                                required type="radio">
+                            </lightning-radio-group>
+                        </div>
+
+                        <div
+                            class="standard-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large">
+                            After you grant access, your users have at least that level of access to the account plan.
+                            If you select Must Request Access, the document owner must grant access to users. To set
+                            access at the org level, use synced sharing.
+                        </div>
+
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="6" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Just Double Checking&hellip;</h3>
+                        <p>The setup will be carried out when you click Next.</p>
+
+                        <div class="slds-m-top_large slds-text-align_left">
+                            <div class="slds-media slds-media_center slds-m-bottom_large"
+                                style="align-items: flex-start;" for:each={verificationSteps} for:item="step"
+                                key={step.key}>
+                                <div class="slds-media__figure">
+                                    <div class="slds-progress-ring slds-progress-ring_large">
+                                        <div class="slds-progress-ring__progress" role="progressbar" aria-valuemin="0"
+                                            aria-valuemax="100" aria-valuenow="0">
+                                        </div>
+                                        <div class="slds-progress-ring__content">{step.key}</div>
+                                    </div>
+                                </div>
+                                <div class="slds-media__body">
+                                    <div>{step.text}</div>
+                                    <div class="slds-text-title" if:true={step.description}>{step.description}</div>
+                                    <template if:true={preflightChecksRunning}>
+                                        <template if:true={step.preflightCheck}>
+                                            <div class="check-text slds-m-vertical_medium"
+                                                if:true={step.preflightCheck.loading}>
+                                                <div class="slds-m-right_small"
+                                                    style="width: 20px; position: relative;">
+                                                    <lightning-spinner alternative-text="Loading" size="small">
+                                                    </lightning-spinner>
+                                                </div>
+                                                <span>Checking&hellip;</span>
+                                            </div>
+                                            <template if:false={step.preflightCheck.loading}>
+                                                <template if:false={step.preflightCheck.error}>
+                                                    <div class="slds-text-title slds-text-color_success check-text slds-m-vertical_x-small"
+                                                        if:true={step.preflightCheck.result}>
+                                                        <lightning-icon icon-name="utility:success" variant="success"
+                                                            class="slds-m-right_small" size="x-small"></lightning-icon>
+                                                        <span>{step.checkTrue}</span>
+                                                    </div>
+                                                    <div class="slds-text-title slds-text-color_success check-text slds-m-vertical_x-small"
+                                                        if:false={step.preflightCheck.result}>
+                                                        <lightning-icon icon-name="utility:success" variant="success"
+                                                            class="slds-m-right_small" size="x-small"></lightning-icon>
+                                                        <span>{step.checkFalse}</span>
+                                                    </div>
+                                                </template>
+                                                <div class="slds-text-title slds-text-color_error check-text slds-m-vertical_x-small"
+                                                    if:true={step.preflightCheck.error}>
+                                                    <lightning-icon icon-name="utility:error" variant="error"
+                                                        class="slds-m-right_small" size="x-small"></lightning-icon>
+                                                    <span>{step.preflightCheck.error}</span>
+                                                </div>
+                                            </template>
+                                        </template>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="standard-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large"
+                            if:false={isPreflightCheckError}>
+                            Do you want to learn more about this setup before proceeding? <a
+                                href="https://quip.com/joX8A0pWzAoR" target="_blank">Tell Me More</a>.
+                        </div>
+
+                        <div class="standard-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large"
+                            if:true={isPreflightCheckError}>
+                            Having trouble with this setup?<br />
+                            To finish setting up your embedded Account Plan, review the steps and fix any errors. Or,
+                            take a look at our <a href="https://quip.com/joX8A0pWzAoR" target="_blank">troubleshooting
+                                guide</a>.
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="7" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Embedding Account Plan&hellip;
+                        </h3>
+                        <p>Hang in there! This might take a minute.</p>
+
+                        <div class="flex-spinner">
+                            <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+                            </lightning-spinner>
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="8" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Account Plan Embedded</h3>
+                        <p>Your Account Plan was added to the {objectNameLabel} object!</p>
+                        <img src={tabSampleImage} alt="Messaging" style="max-height: 200px;"
+                            class="slds-m-vertical_large" />
+                        <p>To set conditions for when an Account Plan is created, click Next.</p>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="9" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Automate Your Account Plan</h3>
+                        <p>Create an Account Plan from the embedded template when&hellip;</p>
+
+                        <fieldset class="slds-form-element slds-m-top_large">
+                            <div class="slds-form-element__control">
+                                <div class="slds-visual-picker slds-visual-picker_medium">
+                                    <input type="radio" id="visual-picker-5" value="manual" name="create-options"
+                                        onchange={handleCreateOptionChange} checked={isCreateOptionManual} />
+                                    <label for="visual-picker-5">
+                                        <span
+                                            class="slds-visual-picker__figure slds-visual-picker__icon slds-align_absolute-center">
+                                            <span class="slds-is-selected">
+                                                <lightning-icon icon-name="action:check" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                            <span class="slds-is-not-selected">
+                                                <img src={tabSampleImage} alt="Messaging"
+                                                    class="slds-p-horizontal_small" />
+                                            </span>
+                                        </span>
+                                        <span class="slds-visual-picker__body">
+                                            <span class="slds-text-heading_small pretty-link">A user manually creates
+                                                one</span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="slds-visual-picker slds-visual-picker_medium">
+                                    <input type="radio" id="visual-picker-6" value="creation" name="create-options"
+                                        onchange={handleCreateOptionChange} checked={isCreateOptionCreation} />
+                                    <label for="visual-picker-6">
+                                        <span
+                                            class="slds-visual-picker__figure slds-visual-picker__icon slds-align_absolute-center">
+                                            <span class="slds-is-selected">
+                                                <lightning-icon icon-name="action:check" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                            <span class="slds-is-not-selected">
+                                                <lightning-icon icon-name="standard:custom_notification" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                        </span>
+                                        <span class="slds-visual-picker__body">
+                                            <span class="slds-text-heading_small pretty-link">A
+                                                new {objectNameLabel} is created</span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="slds-visual-picker slds-visual-picker_medium">
+                                    <input type="radio" id="visual-picker-7" value="custom" name="create-options"
+                                        onchange={handleCreateOptionChange} checked={isCreateOptionCustom} />
+                                    <label for="visual-picker-7">
+                                        <span
+                                            class="slds-visual-picker__figure slds-visual-picker__icon slds-align_absolute-center">
+                                            <span class="slds-is-selected">
+                                                <lightning-icon icon-name="action:check" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                            <span class="slds-is-not-selected">
+                                                <lightning-icon icon-name="standard:process" size="large">
+                                                </lightning-icon>
+                                            </span>
+                                        </span>
+                                        <span class="slds-visual-picker__body">
+                                            <span class="slds-text-heading_small pretty-link">One or more conditions are
+                                                met</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="standard-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large"
+                            if:true={isCreateOptionManual}>
+                            A user goes to the Account Plan tab on the {objectNameLabel} record and creates a document
+                            from the template.
+                        </div>
+
+                        <div class="standard-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large"
+                            if:true={isCreateOptionCreation}>
+                            A new Account Plan is created for every new {objectNameLabel}
+                            using Process Builder.<br /><br />To create an Account Plan for existing {objectNameLabel}
+                            records,
+                            users can click <b>New Document from Template</b> on the record.
+                        </div>
+                        <template if:true={isCreateOptionCreation}>
+                            <div class="check-text slds-m-vertical_medium"
+                                if:true={preflightCheckResults.flowCheck.loading}>
+                                <div class="slds-m-right_small" style="width: 20px; position: relative;">
+                                    <lightning-spinner alternative-text="Loading" size="small">
+                                    </lightning-spinner>
+                                </div>
+                                <span>Checking&hellip;</span>
+                            </div>
+                            <template if:false={preflightCheckResults.flowCheck.loading}>
+                                <template if:false={preflightCheckResults.flowCheck.error}>
+                                    <div class="slds-text-title slds-text-color_success check-text slds-m-vertical_x-small"
+                                        if:true={preflightCheckResults.flowCheck.result}>
+                                        <lightning-icon icon-name="utility:success" variant="success"
+                                            class="slds-m-right_small" size="x-small"></lightning-icon>
+                                        <span>There is a duplicate process for this object. Remove it and try
+                                            again.</span>
+                                    </div>
+                                    <div class="slds-text-title slds-text-color_success check-text slds-m-vertical_x-small"
+                                        if:false={preflightCheckResults.flowCheck.result}>
+                                        <lightning-icon icon-name="utility:success" variant="success"
+                                            class="slds-m-right_small" size="x-small"></lightning-icon>
+                                        <span>The process does not yet exist and will be created</span>
+                                    </div>
+                                </template>
+                                <div class="slds-text-title slds-text-color_error check-text slds-m-vertical_x-small"
+                                    if:true={preflightCheckResults.flowCheck.error}>
+                                    <lightning-icon icon-name="utility:error" variant="error" class="slds-m-right_small"
+                                        size="x-small"></lightning-icon>
+                                    <span>{preflightCheckResults.flowCheck.error}</span>
+                                </div>
+                            </template>
+                        </template>
+
+                        <div class="standard-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large"
+                            if:true={isCreateOptionCustom}>
+                            Use Quip actions in Process Builder or Flow to create an Account Plan based on a series of
+                            conditions. Learn more about <a
+                                href="https://help.salesforce.com/articleView?id=process_action_quip.htm&type=5"
+                                target="_blank">Quip Processes</a> and <a
+                                href="https://help.salesforce.com/articleView?id=quip_template_lightning_flow.htm&type=5"
+                                target="_blank">Automating Quip templates with Lightning Flow</a>
+                        </div>
+
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="10" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Creating Process&hellip;</h3>
+                        <p>Hang in there! This might take a minute.</p>
+
+                        <div class="flex-spinner">
+                            <lightning-spinner alternative-text="Loading" variant="brand" size="large">
+                            </lightning-spinner>
+                        </div>
+                    </div>
+                </c-step-wrapper>
+                <c-step-wrapper step="11" current={currentStep}>
+                    <div class="step-content">
+                        <h3 class="slds-text-heading_large" style="font-weight: 700;">Account Plan Setup Complete</h3>
+                        <p>Your Account Plan template is ready to deploy to your organization.</p>
+
+                        <div class="slds-m-top_large" style="display: flex; align-items: center;"
+                            if:true={lastRunTimestamp}>
+                            <p class="slds-m-right_small">Looks like you completed this setup on {lastRunTime} for the
+                                {objectNameLabel} object.</p>
+                            <lightning-button label="Start Again" title="Start Again" variant="brand"
+                                onclick={handleStartAgain}>
+                            </lightning-button>
+                        </div>
+
+                        <div class="large-width grey-background slds-m-top_large slds-text-align_left column-table">
+                            <div class="slds-p-around_medium">
+                                <lightning-icon icon-name="standard:account" size="large" class="slds-m-right_medium">
+                                </lightning-icon>
+                                <div>
+                                    <div class="slds-text-title_bold">See your Account Plan in Salesforce</div>
+                                    <div if:false={recordPageCopy}>Go to the Lightning Record Page</div>
+                                    <div if:true={recordPageCopy}>Go to the copied Lightning Record Page, and
+                                        activate it when ready</div>
+                                </div>
+                                <a href={outputPageId} target="_blank" class="pretty-link">
+                                    <lightning-button class="slds-m-left_medium" label="See Record Page"
+                                        icon-position="right" icon-name="utility:new_window"></lightning-button>
+                                </a>
+                            </div>
+                            <div class="slds-p-around_medium">
+                                <lightning-icon icon-name="standard:quip" size="large" class="slds-m-right_medium">
+                                </lightning-icon>
+                                <div>
+                                    <div class="slds-text-title_bold">Review Your Account Plan Template in Quip</div>
+                                    <div>View and edit your Account Plan template. To keep your template secure and
+                                        prevent accidental changes, lock document edits. If you added Salesforce live
+                                        apps to your template, make sure that they’re connected to the intended
+                                        Salesforce org.</div>
+                                </div>
+                                <a href={outputTemplateUrl} target="_blank" class="pretty-link">
+                                    <lightning-button class="slds-m-left_medium" label="Review Account Plan"
+                                        icon-position="right" icon-name="utility:new_window"></lightning-button>
+                                </a>
+                            </div>
+                            <div class="slds-p-around_medium" if:true={isCreateOptionCreation}>
+                                <lightning-icon icon-name="standard:process" size="large" class="slds-m-right_medium">
+                                </lightning-icon>
+                                <div>
+                                    <div class="slds-text-title_bold">Customize Process Builder Conditions</div>
+                                    <div>To customize when an Account Plan is created, adjust the conditions in Process
+                                        Builder. The process is called <b>{flowLabel}</b>.
+                                    </div>
+                                </div>
+                                <a href="/lightning/setup/ProcessAutomation/home" class="pretty-link" target="_blank">
+                                    <lightning-button class="slds-m-left_medium" label="Go to Process Builder"
+                                        icon-position="right" icon-name="utility:new_window"></lightning-button>
+                                </a>
+                            </div>
+                            <div class="slds-p-around_medium" if:true={isCreateOptionCustom}>
+                                <lightning-icon icon-name="standard:process" size="large" class="slds-m-right_medium">
+                                </lightning-icon>
+                                <div>
+                                    <div class="slds-text-title_bold">Build your creation process in Process Builder
+                                    </div>
+                                    <div>Set up conditions to automatically create Account Plans at the right time</div>
+                                </div>
+                                <a href="/lightning/setup/ProcessAutomation/home" class="pretty-link" target="_blank">
+                                    <lightning-button class="slds-m-left_medium" label="Go to Process Builder"
+                                        icon-position="right" icon-name="utility:new_window"></lightning-button>
+                                </a>
+                            </div>
+                            <div class="slds-p-around_medium">
+                                <lightning-icon icon-name="custom:custom108" size="large" class="slds-m-right_medium">
+                                </lightning-icon>
+                                <div>
+                                    <div class="slds-text-title_bold">Review Account Plan Setup</div>
+                                    <div>Learn more about Account Plans, automation, and the Account Plans embedding
+                                        process.</div>
+                                </div>
+                                <a class="pretty-link" href="https://quip.com/joX8A0pWzAoR" target="_blank">
+                                    <lightning-button class="slds-m-left_medium" label="Tell Me More"
+                                        icon-position="right" icon-name="utility:new_window"></lightning-button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </c-step-wrapper>
+            </div>
+            <footer if:false={lastRunTimestamp}>
+                <lightning-button label="Back" title="Back" class="back" if:false={isFirstStep} onclick={handleBack}
+                    disabled={isBackDisabled}>
+                </lightning-button>
+                <div class="progress">
+                    <lightning-progress-indicator current-step={highlightedStep} type="base" variant="base">
+                        <lightning-progress-step key={step.id} label={step.label} value={step.id}
+                            for:each={visibleSteps} for:item="step"></lightning-progress-step>
+                    </lightning-progress-indicator>
+                </div>
+                <template if:true={isFirstStep}>
+                    <lightning-button variant="brand" label="Start" title="Start" class="next" onclick={handleNext}
+                        disabled={isNextDisabled}></lightning-button>
+                </template>
+                <template if:false={isFirstStep}>
+                    <lightning-button variant="brand" label="Next" title="Next" class="next" if:false={isLastStep}
+                        onclick={handleNext} disabled={isNextDisabled}></lightning-button>
+                    <lightning-button variant="brand" label="Done" title="Done" class="next" if:true={isLastStep}
+                        onclick={handleFinish}></lightning-button>
+                </template>
+            </footer>
+        </div>
+    </c-section-wrapper>
+</template>

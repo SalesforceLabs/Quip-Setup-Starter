@@ -1,0 +1,23 @@
+<template>
+    <div class="main">
+        <div>
+            <nav class="slds-nav-vertical">
+                <lightning-input name="search" type="search" placeholder="Quick Find" onchange={handleSearch}
+                value={search} class="slds-m-bottom_small slds-m-horizontal_medium"></lightning-input>
+                <template for:each={headingsWithSections} for:item="heading" if:true={headingsWithSections.length}>
+                    <div class="slds-nav-vertical__section" key={heading.key}>
+                        <h2 class="slds-nav-vertical__title">{heading.label}</h2>
+                        <ul>
+                            <c-navigation-item section={section} for:each={heading.sections} for:item="section" key={section.key}
+                            onselect={handleSelect}></c-navigation-item>
+                        </ul>
+                    </div>
+                </template>
+            </nav>
+            <p if:false={headingsWithSections.length} class="slds-text-align_center slds-p-around_large slds-text-title">
+                Nothing to see here!</p>
+        </div>
+
+        <p class="slds-p-horizontal_large slds-p-vertical_small slds-text-color_weak" style="font-size: .6rem;">{packageVersion}</p>
+    </div>
+</template>

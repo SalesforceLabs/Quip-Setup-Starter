@@ -1,0 +1,31 @@
+<template>
+    <c-section-wrapper>
+        <div class="main">
+            <h1 class="slds-text-heading_large slds-m-bottom_medium">Welcome to Quip for Customer 360</h1>
+            <template if:true={authProvider}>
+                <p>Set up Quip Lightning components, embed Quip Account Plans and Opportunity Notes in your record
+                    pages, and configure basic Quip processes.</p>
+                <p>Click <b>Log In to Quip</b>, then use your Quip admin credentials to log in. You land on the Salesforce
+                    Setup page. Close the page and return to set up your Quip for Customer 360 features.
+                </p>
+                <lightning-button if:false={hasAttemptedAuthentication} variant="brand" label="Log In to Quip"
+                    title="Log In to Quip" onclick={handleAuthenticate} class="slds-m-vertical_large"></lightning-button>
+                <lightning-button if:true={hasAttemptedAuthentication} variant="neutral" label="Log In to Quip"
+                    title="Log In to Quip" onclick={handleAuthenticate} class="slds-m-vertical_large"></lightning-button>
+                <template if:true={hasAttemptedAuthentication}>
+                    <p>Back already? Nice! Let's check to make sure that your Quip account is ready to go.</p>
+                    <lightning-button variant="brand" label="Check Connection" title="Check Connection"
+                        onclick={handleVerify} class="slds-m-top_large"></lightning-button>
+                </template>
+            </template>
+            <template if:false={authProvider}>
+                <p>Set up Quip Lightning components, embed Quip Account Plans and Opportunity Notes in your record
+                    pages, and configure basic Quip processes.</p>
+                <p>Before we get started, you need to complete the integration between Salesforce
+                    and Quip.</p>
+                <lightning-button variant="brand" label="Setup Quip" title="Setup Quip" onclick={handleSetup}
+                    class="slds-m-vertical_large"></lightning-button>
+            </template>
+        </div>
+    </c-section-wrapper>
+</template>

@@ -1,0 +1,99 @@
+<template>
+    <c-section-wrapper>
+        <div class="main slds-p-around_large">
+            <img src={astroImage} alt="Astra" />
+            <h1 class="slds-text-heading_large slds-m-vertical_medium">Hmm&hellip; Something's not right.</h1>
+            <p>Let's get to the bottom of it.</p>
+
+            <div style="text-align: left;">
+                <div class="slds-text-title slds-text-color_success check-text slds-m-vertical_x-small"
+                    if:true={metadata}>
+                    <lightning-icon icon-name="utility:success" variant="success" class="slds-m-right_small"
+                        size="x-small">
+                    </lightning-icon>
+                    <span>You have access to the Metadata API!</span>
+                </div>
+                <div class="slds-text-title slds-text-color_error check-text slds-m-vertical_x-small"
+                    if:false={metadata}>
+                    <lightning-icon icon-name="utility:error" variant="error" class="slds-m-right_small" size="x-small">
+                    </lightning-icon>
+                    <span>You don't have access to the Metadata API.</span>
+                </div>
+
+                <div class="slds-text-title slds-text-color_success check-text slds-m-vertical_x-small"
+                    if:true={permSetExists}>
+                    <lightning-icon icon-name="utility:success" variant="success" class="slds-m-right_small"
+                        size="x-small">
+                    </lightning-icon>
+                    <span>The Quip Permission Set exists!</span>
+                </div>
+                <div class="slds-text-title slds-text-color_error check-text slds-m-vertical_x-small"
+                    if:false={permSetExists}>
+                    <lightning-icon icon-name="utility:error" variant="error" class="slds-m-right_small" size="x-small">
+                    </lightning-icon>
+                    <span>The Quip Permission Set doesn't exist.</span>
+                </div>
+
+                <div class="slds-text-title slds-text-color_success check-text slds-m-vertical_x-small"
+                    if:true={permSetAssigned}>
+                    <lightning-icon icon-name="utility:success" variant="success" class="slds-m-right_small"
+                        size="x-small">
+                    </lightning-icon>
+                    <span>You have access to Quip!</span>
+                </div>
+                <div class="slds-text-title slds-text-color_error check-text slds-m-vertical_x-small"
+                    if:false={permSetAssigned}>
+                    <lightning-icon icon-name="utility:error" variant="error" class="slds-m-right_small" size="x-small">
+                    </lightning-icon>
+                    <span>You don't have access to Quip. Make sure you have the Quip permission set assigned.</span>
+                </div>
+                
+                <div class="slds-text-title slds-text-color_success check-text slds-m-vertical_x-small"
+                    if:true={apexTriggers}>
+                    <lightning-icon icon-name="utility:success" variant="success" class="slds-m-right_small" size="x-small">
+                    </lightning-icon>
+                    <span>There are no conflicting Apex Triggers!</span>
+                </div>
+                <div class="slds-text-title slds-text-color_error check-text slds-m-vertical_x-small"
+                    if:false={apexTriggers}>
+                    <lightning-icon icon-name="utility:error" variant="error" class="slds-m-right_small" size="x-small">
+                    </lightning-icon>
+                    <span>One or more Apex Triggers named Quip exist.</span>
+                </div>
+
+            </div>
+
+            <div class="large-width grey-background slds-p-around_medium slds-text-align_left slds-m-top_large">
+
+                <div if:false={metadata}>
+                    To connect Quip and Salesforce, you need the API Enabled permission and either the Modify All Data
+                    or Modify Metadata Through Metadata API Functions permission. To continue, add these permissions or
+                    ask your Salesforce admin for help.
+                    <br /><br />
+                </div>
+
+                <div if:false={permSetExists}>
+                    To connect Quip and Salesforce, complete the <a class="pretty-link"
+                        href="/lightning/setup/SalesforceAnywhereSetupPage/home" target="_blank">Salesforce Anywhere setup in Salesforce</a>.
+                    Quip creates the permission set, external data source and auth. provider for you.
+                    <br /><br />
+                </div>
+
+                <div if:false={permSetAssigned}>
+                    To access Quip, assign the Quip permission set to yourself. Go to <a class="pretty-link"
+                        href="/lightning/setup/PermSets/home" target="_blank">Permission Sets</a>, select Quip, and
+                    click Manage Assignments.
+                    <br /><br />
+                </div>
+                
+                <div if:false={apexTriggers}>
+                    Remove any Apex Triggers with Quip in their name. These are not compatible with Quip Setup Starter.
+                    <br /><br />
+                </div>
+
+                To set up your Quip Setup Starter features, correct the issues and refresh the page. If the issues
+                continue, <a class="pretty-link" href="/HelpAndTrainingDoor" target="_blank">contact Quip Support</a>.
+            </div>
+        </div>
+    </c-section-wrapper>
+</template>
